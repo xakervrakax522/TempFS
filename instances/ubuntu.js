@@ -28,10 +28,13 @@ class Ubuntu extends Container {
     Logger.inProgress(`Iniciando container ${this.config.containerName}...`)
     
     try {
-      await execAsync(`podman rm -f ${this.config.containerName} 2>/dev/null || true`)
+      if (!this.config.persistent) {
+        await execAsync(`podman rm -f ${this.config.containerName} 2>/dev/null || true`)
+      }
     } catch (e) {}
 
-    const runCommand = `podman run --rm -d --replace \
+    const rmFlag = this.config.persistent ? '' : '--rm'
+    const runCommand = `podman run ${rmFlag} -d --replace \
       --name ${this.config.containerName} \
       --hostname ${this.config.containerName} \
       --tmpfs /root \

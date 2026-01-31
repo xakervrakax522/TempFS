@@ -1,10 +1,11 @@
-import Base from './core/base.js'
-import Ubuntu from './instances/ubuntu.js'
+import Base from '../core/base.js'
+import Ubuntu from '../instances/ubuntu.js'
 
 class TempFSApp extends Base {
   constructor() {
     super()
     this.name = 'TempFS (Ubuntu)'
+    this.roles = ['base', 'ping']
   }
 
   createContainer() {

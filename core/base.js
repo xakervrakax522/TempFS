@@ -1,4 +1,4 @@
-import * as terminal from '../utils/terminal.js'
+import * as terminal from '../terminal/index.js'
 import Logger from '../utils/logger.js'
 
 class Base {
@@ -6,56 +6,26 @@ class Base {
     this.isRunning = false
     this.container = null
     this.name = 'Base'
+    this.roles = ['base'] // Role padrão para todas as instâncias
     this._isShuttingDown = false
   }
 
   async handleCommand(input) {
-    const trimmed = input.trim()
+    const executed = await terminal.executeCommand(this, input)
     
-    if (trimmed.toLowerCase() === 'exit') {
-      await this.shutdown()
-      return
+    if (!executed) {
+      const commands = terminal.getCommands(this)
+      const available = commands.map(c => c.name).join(', ')
+      Logger.warning(`Comando não encontrado. Comandos disponíveis: ${available}`)
     }
-    
-    if (trimmed.toLowerCase() === 'clear') {
-      terminal.clearTerminal()
-      return
-    }
-    
-    if (trimmed.toLowerCase() === 'bash') {
-      terminal.setState(terminal.TerminalState.TRANSITIONING)
-      terminal.closeTerminal()
-      
-      await this.container.terminal()
-      
-      terminal.createTerminal(this.handleCommand.bind(this))
-      terminal.prompt()
-      return
-    } else if (trimmed.toLowerCase().startsWith('bash ')) {
-      const command = trimmed.slice(5).trim()
-      
-      if (!command) {
-        Logger.warning('Uso: bash <comando> ou apenas bash para entrar no shell')
-        return
-      }
-      
-      try {
-        const output = await this.container.shell(command)
-        if (output) {
-          Logger.output(output)
-        }
-      } catch (e) {
-        Logger.error(`Erro: ${e.message}`)
-      }
-      return
-    }
-    
-    Logger.warning('Comandos disponíveis: exit, clear, bash, bash <comando>')
   }
 
   async init() {
     try {
       Logger.info(`Iniciando ${this.name}.`)
+      
+      // Carregar comandos do terminal
+      await terminal.loadCommands()
       
       this.container = this.createContainer()
       await this.container.start()
@@ -80,10 +50,25 @@ class Base {
   welcomeMessage() {
     Logger.success(`Bem vindo ao ${this.name}!\n`)
     Logger.info('Comandos disponíveis:')
-    Logger.info('  exit            - Encerra o sistema')
-    Logger.info('  clear           - Limpa o console')
-    Logger.info('  bash            - Entra no bash do container')
-    Logger.info('  bash <comando>  - Executa comando no container\n')
+    const commands = terminal.getCommands(this)
+    
+    commands.forEach(cmd => {
+      if (Array.isArray(cmd.description)) {
+        cmd.description.forEach((desc, index) => {
+          const prefix = index === 0 ? cmd.name.padEnd(15) : `${cmd.name} ${desc.split(' - ')[0]}`.padEnd(15)
+          const text = index === 0 ? desc : desc.split(' - ')[1] || desc
+          
+          if (index === 0) {
+            Logger.info(`  ${cmd.name.padEnd(15)} - ${desc}`)
+          } else {
+            Logger.info(`  ${cmd.name} ${desc}`)
+          }
+        })
+      } else {
+        Logger.info(`  ${cmd.name.padEnd(15)} - ${cmd.description}`)
+      }
+    })
+    console.log('') // Gambiarra pra quebra de linha kkk
   }
 
   async shutdown() {
@@ -121,7 +106,7 @@ class Base {
 
     process.on('exit', (code) => {
       if (code !== 0 && !this._isShuttingDown) {
-        // Não precisa implementar graças a utils/monitor.js
+        // Monitorado por utils/monitor.js
       }
     })
   }

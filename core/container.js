@@ -12,12 +12,16 @@ class Container {
     this.monitor = null
     this.config = {
       containerName: config.containerName || 'container-base',
+      persistent: config.persistent || false,
       ...config
     }
   }
 
-  async shell(command, showProgress = false) {
+  async shell(command, options = {}) {
     if (!this.isRunning) throw new Error('Container offline.')
+    
+    const showProgress = options.showProgress || false
+    const onData = options.onData || null
     
     const args = ['exec', this.config.containerName, '/bin/bash', '-c', command]
     
@@ -32,6 +36,7 @@ class Container {
       proc.stdout.on('data', (data) => {
         const str = data.toString()
         output += str
+        if (onData) onData(str)
         if (showProgress) Logger.progress(str.trim())
       })
 
@@ -40,7 +45,6 @@ class Container {
         errorOutput += str
         
         if (showProgress) {
-          // Tenta encontrar um padrão de percentual (ex: 45.2%)
           const match = str.match(/(\d+(\.\d+)?%)/)
           if (match) {
             Logger.progress(`Baixando modelo... ${match[0]}`)
@@ -49,7 +53,7 @@ class Container {
       })
 
       proc.on('close', (code) => {
-        if (showProgress) console.log('') // Nova linha após o progresso
+        if (showProgress) console.log('')
         if (code === 0) resolve(output.trim())
         else reject(new Error(errorOutput.trim() || `Erro ${code}`))
       })
@@ -73,7 +77,7 @@ class Container {
   // Meu pequeno monitoramento zumbi
   activateMonitor(processName) {
     if (this.monitor) return
-    this.monitor = startActiveMonitor(this.config.containerName, processName)
+    this.monitor = startActiveMonitor(this.config.containerName, processName, this.config.persistent)
   }
 
   async cleanupInternalProcesses(processName) {
@@ -94,7 +98,12 @@ class Container {
     }
 
     try {
-      await execAsync(`podman stop -t 0 ${this.config.containerName} 2>/dev/null || podman kill ${this.config.containerName} 2>/dev/null`)
+      if (this.config.persistent) {
+        await execAsync(`podman stop -t 0 ${this.config.containerName} 2>/dev/null || true`)
+      } else {
+        await execAsync(`podman stop -t 0 ${this.config.containerName} 2>/dev/null || podman kill ${this.config.containerName} 2>/dev/null`)
+        await execAsync(`podman rm -f ${this.config.containerName} 2>/dev/null || true`)
+      }
     } catch (e) {
     } finally {
       this.isRunning = false

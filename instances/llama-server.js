@@ -10,6 +10,7 @@ class Llama extends Container {
       host: config.host || '0.0.0.0',
       port: config.port || 8080,
       containerName: config.containerName || 'llama-cpp',
+      persistent: true,
       ...config
     })
   }

@@ -1,11 +1,12 @@
-import Base from './core/base.js'
-import Llama from './instances/llama.js'
-import ConfigLoader from './utils/config.js'
+import Base from '../core/base.js'
+import Llama from '../instances/llama-server.js'
+import ConfigLoader from '../utils/config.js'
 
 class LlamaApp extends Base {
   constructor() {
     super()
     this.name = 'Llama Server'
+    this.roles = ['bash', 'clear', 'exit']
     
     const config = ConfigLoader.getConfig() || {
       model: {

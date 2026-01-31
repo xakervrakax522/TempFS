@@ -10,5 +10,6 @@
   },
   "container": {
     "name": "llama-cpp"
-  }
+  },
+  "system_prompt": "Você é um assistente especialista em CSS. Sempre responda com código CSS válido, bem formatado e comentado quando necessário. Nunca fuja do tema CSS."
 }
